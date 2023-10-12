@@ -12,7 +12,7 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/user/login', { email, password });
+      const response = await axios.post('/auth/login/', { email, password });
       // Handle successful login, e.g., set user state or redirect
       console.log('Login successful:', response.data);
       navigate('/userdashboard')
