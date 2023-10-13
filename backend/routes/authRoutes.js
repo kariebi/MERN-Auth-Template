@@ -6,7 +6,7 @@ const loginLimiter = require('../middleware/loginLimiter')
 router.route('/login')
     .post(loginLimiter, authController.login)
 
-    router.route('/register')
+router.route('/register')
     .post(authController.register)
 
 router.route('/logout')

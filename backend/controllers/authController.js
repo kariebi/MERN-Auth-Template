@@ -1,6 +1,6 @@
 const User = require('../models/User')
-const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const { hashPassword, comparePassword } = require('../helpers/auth')
 
 // @desc Register
 // @route POST /auth
@@ -25,11 +25,15 @@ const register = async (req, res) => {
             })
         }
 
+        const hashedpassword = await hashPassword(password)
+
         const user = await User.create({
-            name, email, password
+            name,
+            email,
+            password: hashedpassword
         })
         return res.json(user)
-        
+
     } catch (error) {
         console.log(error)
     }
@@ -42,19 +46,19 @@ const register = async (req, res) => {
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
-    // const { username, password } = req.body
+    const { email, password } = req.body
 
-    // if (!username || !password) {
-    //     return res.status(400).json({ message: 'All fields are required' })
-    // }
+    if (!email || !password) {
+        return res.status(400).json({ error: 'All fields are required' })
+    }
 
-    // const foundUser = await User.findOne({ username }).exec()
+    const foundUser = await User.findOne({ email }).exec()
 
-    // if (!foundUser || !foundUser.active) {
-    //     return res.status(401).json({ message: 'Unauthorized' })
-    // }
+    if (!foundUser || !foundUser.active) {
+        return res.status(401).json({error: 'This is is not registered' })
+    }
 
-    // const match = await bcrypt.compare(password, foundUser.password)
+    const math=await comparePassword(password,founduser.password)
 
 }
 
@@ -110,5 +114,6 @@ const logout = (req, res) => {
 module.exports = {
     login,
     refresh,
+    register,
     logout
 }

@@ -14,8 +14,16 @@ const SignIn = () => {
     try {
       const response = await axios.post('/auth/login/', { email, password });
       // Handle successful login, e.g., set user state or redirect
-      console.log('Login successful:', response.data);
-      navigate('/userdashboard')
+      if (response.error){
+        toast.error(response.error)
+      }else{
+        setName('')
+        setEmail('')
+        setPassword('')
+        toast.success('Login Successful')
+        navigate('/userdashboard')
+      }
+      // console.log('Registration successful:', response.data);
     } catch (error) {
       // Display error using react-hot-toast
       toast.error('Failed to sign in. Please check your credentials.');

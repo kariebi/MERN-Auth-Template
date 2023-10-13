@@ -9,6 +9,7 @@ import Missing from './pages/Missing'
 import './App.css'
 import { BASE_URL } from '../constants'
 import axios from 'axios'
+import { Toaster } from 'react-hot-toast'
 
 axios.defaults.baseURL = BASE_URL
 axios.defaults.withCredentials = true
@@ -16,7 +17,8 @@ axios.defaults.withCredentials = true
 function App() {
 
   return (
-    <>
+    <> 
+    <Toaster position='top-center' toastOptions={{duration:2000}} /> 
       <Routes>
         <Route path='/' element={<PrimaryLayout />}>
           <Route index element={<Home />} />
