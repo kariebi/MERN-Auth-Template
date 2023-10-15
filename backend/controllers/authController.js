@@ -149,7 +149,7 @@ const logout = (req, res) => {
 module.exports = {
     login,
     refresh,
-    getprofile,
+    // getprofile,
     register,
     logout
 }
