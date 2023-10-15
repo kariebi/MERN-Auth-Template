@@ -1,22 +1,30 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { useRegisterMutation } from '../auth/authApiSlice';
+import useTitle from '../hooks/useTitle'
+
 
 const Register = () => {
+  useTitle('Register')
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
 
+  const [register, { isLoading }] = useRegisterMutation()
+
+
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/register/', { name, email, password });
+      const response = await register({ name, email, password }).unwrap()
       // Handle successful registration, e.g., set user state or redirect
-      if (response.error){
+      if (response.error) {
         toast.error(response.error)
-      }else{
+      } else {
         setName('')
         setEmail('')
         setPassword('')

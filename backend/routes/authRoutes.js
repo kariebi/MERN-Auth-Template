@@ -9,8 +9,8 @@ router.route('/login')
 router.route('/register')
     .post(authController.register)
 
-router.route('/profile')
-    .get(authController.getprofile)
+// router.route('/profile')
+//     .get(authController.getprofile)
 
 router.route('/logout')
     .post(authController.logout)

@@ -9,12 +9,20 @@ import toast from 'react-hot-toast';
 
 const SignIn = () => {
   useTitle('SignIn')
+
+
+  const emailRef = useRef()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
-
+  const dispatch = useDispatch()
+  const [persist, setPersist] = usePersist()
 
   const [login, { isLoading }] = useLoginMutation()
+
+  useEffect(() => {
+    emailRef.current.focus()
+  }, [])
 
   const handleSignIn = async (e) => {
     e.preventDefault();
@@ -44,12 +52,32 @@ const SignIn = () => {
       <h2>Sign In</h2>
       <form onSubmit={handleSignIn}>
         <label>Email:</label>
-        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <input
+          type="email"
+          value={email}
+          ref={emailRef}
+          onChange={(e) => setEmail(e.target.value)} 
+          required />
 
         <label>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
+        <label htmlFor="persist" className="">
+          <input
+            type="checkbox"
+            className=""
+            id="persist"
+            onChange={handleToggle}
+            checked={persist}
+          />
+
+          Trust This Device
+        </label>
+
         <button type="submit">Sign In</button>
+        <section>
+          <Link to="/">Back to Home</Link>
+        </section>
       </form>
     </div>
   );

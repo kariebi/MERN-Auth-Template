@@ -85,19 +85,19 @@ const login = async (req, res) => {
 }
 
 // @desc Refresh
-// @route GET /auth/profile
-const getprofile = (req, res) => {
-    const { token } = req.cookies
-    if (token) {
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {},
-            (err, user) => {
-                if (err) throw err;
-                res.json(user)
-            })
-    } else {
-        res.json(null)
-    }
-}
+// // @route GET /auth/profile
+// const getprofile = (req, res) => {
+//     const { token } = req.cookies
+//     if (token) {
+//         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {},
+//             (err, user) => {
+//                 if (err) throw err;
+//                 res.json(user)
+//             })
+//     } else {
+//         res.json(null)
+//     }
+// }
 
 
 // @desc Refresh

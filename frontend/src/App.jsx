@@ -8,24 +8,31 @@ import Register from './pages/Register'
 import Missing from './pages/Missing'
 import './App.css'
 import { Toaster } from 'react-hot-toast'
-
+import PersistLogin from './auth/PersistLogin'
+import RequireAuth from './auth/RequireAuth'
+import { ROLES } from './config/roles'
+import useTitle from './hooks/useTitle';
 
 function App() {
+  useTitle('MERN AUTH Template')
 
   return (
-    <> 
-    <Toaster position='top-center' toastOptions={{duration:2000}} /> 
+    <>
+      <Toaster position='top-center' toastOptions={{ duration: 2000 }} />
       <Routes>
         <Route path='/' element={<PrimaryLayout />}>
           <Route index element={<Home />} />
           <Route path='signin' element={<SignIn />} />
           <Route path='register' element={<Register />} />
           {/* Protected Routes */}
-
-          <Route path='userdashboard' element={<DashLayout />}>
-            <Route index element={<Dashboard />} />
+          <Route element={<PersistLogin />}>
+            <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>
+              <Route path='userdashboard' element={<DashLayout />}>
+                <Route index element={<Dashboard />} />
+              </Route>
+            </Route>
           </Route>
-          <Route path='*' element={<Missing/>}/>
+          <Route path='*' element={<Missing />} />
         </Route>
       </Routes>
     </>
