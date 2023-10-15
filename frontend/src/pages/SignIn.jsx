@@ -60,7 +60,7 @@ const SignIn = () => {
         <label>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-        <label htmlFor="persist" className="hidden">
+        {/* <label htmlFor="persist" className="hidden">
           <input
             type="checkbox"
             className=""
@@ -70,7 +70,7 @@ const SignIn = () => {
           />
 
           Trust This Device
-        </label>
+        </label> */}
 
         <button type="submit">Sign In</button>
         <section>
