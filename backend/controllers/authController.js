@@ -46,7 +46,6 @@ const register = async (req, res) => {
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
-    try {
         const { email, password } = req.body
 
         if (!email || !password) {
@@ -60,31 +59,40 @@ const login = async (req, res) => {
         }
 
         const PasswordsMatch = await comparePassword(password, foundUser.password)
+        
+        if (!PasswordsMatch) return res.status(401).json({ message: 'Unauthorized' })
 
-        if (PasswordsMatch) {
-            jwt.sign({
-                email: foundUser.email,
-                id: foundUser._id,
-                name: foundUser.username,
-            }, process.env.ACCESS_TOKEN_SECRET, {},
-                (err, token) => {
-                    if (err) throw err;
-                    res.cookie('token', token).json(foundUser)
-                })
-            res.status(200).json('Login successful')
-        }
-        if (!PasswordsMatch) {
-            res.json({
-                error: 'Incorrect email or password'
-            })
-        }
+        const accessToken = jwt.sign(
+            {
+                "UserInfo": {
+                    "username": foundUser.username,
+                    "roles": foundUser.roles
+                }
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '15m' }
+        )
+    
+        const refreshToken = jwt.sign(
+            { "username": foundUser.username },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d' }
+        )
+    
+        // Create secure cookie with refresh token 
+        res.cookie('jwt', refreshToken, {
+            httpOnly: true, //accessible only by web server 
+            secure: true, //https
+            sameSite: 'None', //cross-site cookie 
+            maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
+        })
+    
+        // Send accessToken containing username and roles 
+        res.json({ accessToken })
 
-    } catch (error) {
-        console.log(error)
-    }
 }
 
-// @desc Refresh
+// @desc Profile
 // // @route GET /auth/profile
 // const getprofile = (req, res) => {
 //     const { token } = req.cookies
