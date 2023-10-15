@@ -34,6 +34,7 @@ const SignIn = () => {
       // Handle successful login, e.g., set user state or redirect
         setEmail('')
         setPassword('')
+        setPersist(true)
         toast.success('Login Successful')
         navigate('/userdashboard')
       // console.log('Registration successful:', response.data);
@@ -59,7 +60,7 @@ const SignIn = () => {
         <label>Password:</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
 
-        <label htmlFor="persist" className="">
+        <label htmlFor="persist" className="hidden">
           <input
             type="checkbox"
             className=""
