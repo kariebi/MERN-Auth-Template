@@ -6,7 +6,7 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
 
 - **Vite-React for Frontend**: The frontend is built using Vite, a fast development server and build tool for modern web development.
 - **Tailwind CSS for Stlying**: The UI of this app also implemented TailwindCSS, for easy and easily adjustable styling.
--**Fortawesome icons**: This template also uses icons gotten gfrom the fortawesome library
+-**Fortawesome icons**: This template also uses icons gotten gfrom the fortawesome library.
 - **Express.js for Backend API**: The backend API is powered by Express.js, a minimal and flexible Node.js web application framework.
 - **MongoDB for Database**: MongoDB is used as the database to store user authentication information.
 - **Authentication Middleware**: The template includes middleware for user authentication, making it easy to secure routes.
