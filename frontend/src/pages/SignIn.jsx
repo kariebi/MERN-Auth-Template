@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import { useRef, useState, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setCredentials } from '../auth/authSlice'
+import { useLoginMutation } from '../auth/authApiSlice'
+import usePersist from '../hooks/usePersist'
+import useTitle from '../hooks/useTitle'
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
 
 const SignIn = () => {
+  useTitle('SignIn')
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate()
+
+
+  const [login, { isLoading }] = useLoginMutation()
 
   const handleSignIn = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/auth/login/', { email, password });
+      const { accessToken } = await login({ email, password }).unwrap()
+      dispatch(setCredentials({ accessToken }))
       // Handle successful login, e.g., set user state or redirect
-      if (response.error){
+      if (response.error) {
         toast.error(response.error)
-      }else{
-        setName('')
+      } else {
         setEmail('')
         setPassword('')
         toast.success('Login Successful')

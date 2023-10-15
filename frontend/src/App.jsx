@@ -7,12 +7,8 @@ import SignIn from './pages/SignIn'
 import Register from './pages/Register'
 import Missing from './pages/Missing'
 import './App.css'
-import { BASE_URL } from '../constants'
-import axios from 'axios'
 import { Toaster } from 'react-hot-toast'
 
-axios.defaults.baseURL = BASE_URL
-axios.defaults.withCredentials = true
 
 function App() {
 
@@ -25,6 +21,7 @@ function App() {
           <Route path='signin' element={<SignIn />} />
           <Route path='register' element={<Register />} />
           {/* Protected Routes */}
+
           <Route path='userdashboard' element={<DashLayout />}>
             <Route index element={<Dashboard />} />
           </Route>

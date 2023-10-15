@@ -28,8 +28,8 @@ const register = async (req, res) => {
         const hashedpassword = await hashPassword(password)
 
         const user = await User.create({
-            name,
-            email,
+            username: name,
+            email: email,
             password: hashedpassword
         })
         return res.json(user)
@@ -46,23 +46,58 @@ const register = async (req, res) => {
 // @route POST /auth
 // @access Public
 const login = async (req, res) => {
-    const { email, password } = req.body
+    try {
+        const { email, password } = req.body
 
-    if (!email || !password) {
-        return res.status(400).json({ error: 'All fields are required' })
+        if (!email || !password) {
+            return res.status(400).json({ error: 'All fields are required' })
+        }
+
+        const foundUser = await User.findOne({ email }).exec()
+
+        if (!foundUser) {
+            return res.status(401).json({ error: 'You are not registered' })
+        }
+
+        const PasswordsMatch = await comparePassword(password, foundUser.password)
+
+        if (PasswordsMatch) {
+            jwt.sign({
+                email: foundUser.email,
+                id: foundUser._id,
+                name: foundUser.username,
+            }, process.env.ACCESS_TOKEN_SECRET, {},
+                (err, token) => {
+                    if (err) throw err;
+                    res.cookie('token', token).json(foundUser)
+                })
+            res.status(200).json('Login successful')
+        }
+        if (!PasswordsMatch) {
+            res.json({
+                error: 'Incorrect email or password'
+            })
+        }
+
+    } catch (error) {
+        console.log(error)
     }
-
-    const foundUser = await User.findOne({ email }).exec()
-
-    if (!foundUser || !foundUser.active) {
-        return res.status(401).json({error: 'This is is not registered' })
-    }
-
-    const math=await comparePassword(password,founduser.password)
-
 }
 
-
+// @desc Refresh
+// @route GET /auth/profile
+const getprofile = (req, res) => {
+    const { token } = req.cookies
+    if (token) {
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {},
+            (err, user) => {
+                if (err) throw err;
+                res.json(user)
+            })
+    } else {
+        res.json(null)
+    }
+}
 
 
 // @desc Refresh
@@ -114,6 +149,7 @@ const logout = (req, res) => {
 module.exports = {
     login,
     refresh,
+    getprofile,
     register,
     logout
 }
