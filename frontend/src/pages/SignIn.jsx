@@ -19,6 +19,7 @@ const SignIn = () => {
   const [persist, setPersist] = usePersist()
 
   const [login, { isLoading }] = useLoginMutation()
+  const handleToggle = () => setPersist(prev => !prev)
 
   useEffect(() => {
     emailRef.current.focus()
@@ -31,14 +32,10 @@ const SignIn = () => {
       const { accessToken } = await login({ email, password }).unwrap()
       dispatch(setCredentials({ accessToken }))
       // Handle successful login, e.g., set user state or redirect
-      if (response.error) {
-        toast.error(response.error)
-      } else {
         setEmail('')
         setPassword('')
         toast.success('Login Successful')
         navigate('/userdashboard')
-      }
       // console.log('Registration successful:', response.data);
     } catch (error) {
       // Display error using react-hot-toast
@@ -56,7 +53,7 @@ const SignIn = () => {
           type="email"
           value={email}
           ref={emailRef}
-          onChange={(e) => setEmail(e.target.value)} 
+          onChange={(e) => setEmail(e.target.value)}
           required />
 
         <label>Password:</label>
