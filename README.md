@@ -5,6 +5,8 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
 ## Features
 
 - **Vite-React for Frontend**: The frontend is built using Vite, a fast development server and build tool for modern web development.
+- **Tailwind CSS for Stlying**: The UI of this app also implemented TailwindCSS, for easy and easily adjustable styling.
+-**Fortawesome icons**: This template also uses icons gotten gfrom the fortawesome library
 - **Express.js for Backend API**: The backend API is powered by Express.js, a minimal and flexible Node.js web application framework.
 - **MongoDB for Database**: MongoDB is used as the database to store user authentication information.
 - **Authentication Middleware**: The template includes middleware for user authentication, making it easy to secure routes.
@@ -40,17 +42,18 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
 
 ### Configuration
 
-1. Create a `.env` file in the root of the project:
+1. Create a `.env` file in the backend folder of the project:
 
     ```env
     # MongoDB Connection URI
     MONGODB_URI=mongodb://localhost:27017/mern-auth
 
-    # JWT Secret Key
-    JWT_SECRET=mysecretkey
+    # JWT Secret Keys
+    ACCESS_TOKEN_SECRET=myaccess'secretkey
+    REFRESH_TOKEN_SECRET=myrefresh'secretkey
     ```
 
-    Update the `MONGODB_URI` with your MongoDB connection URI and set a secure value for `JWT_SECRET`.
+    Update the `MONGODB_URI` with your MongoDB connection URI and set a secure value for `ACCESS_TOKEN_SECRET` and `REFRESH_TOKEN_SECRET`.
 
 ### Running the Application
 
