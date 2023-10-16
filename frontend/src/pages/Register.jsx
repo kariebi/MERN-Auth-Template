@@ -112,7 +112,7 @@ const Register = () => {
             {
               isLoading ?
                 <div className='text-black'>
-                  <PulseLoader size='sm' />
+                  <PulseLoader size='8px' />
                 </div>
                 :
                 'Sign Up'

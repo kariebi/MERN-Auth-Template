@@ -1,6 +1,8 @@
 const User = require('../models/User')
+const Token = require('../models/Token')
 const jwt = require('jsonwebtoken')
-const { hashPassword, comparePassword } = require('../helpers/auth')
+const { hashPassword, comparePassword , generateRandomToken } = require('../helpers/auth')
+
 
 // @desc Register
 // @route POST /auth
@@ -32,8 +34,13 @@ const register = async (req, res) => {
             email: email,
             password: hashedpassword
         })
-        return res.json(user)
 
+        const token = await Token.create({
+            userId: user._id,
+            token: generateRandomToken(),
+        });
+        console.log(token)
+        return res.json(user)
     } catch (error) {
         console.log(error)
     }

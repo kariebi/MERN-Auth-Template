@@ -116,7 +116,7 @@ const SignIn = () => {
             {
               isLoading ?
                 <div className=''>
-                  <PulseLoader size='10px' color='#ffffff' />
+                  <PulseLoader size='8px' color='#ffffff' />
                 </div>
                 :
                 'Sign In'

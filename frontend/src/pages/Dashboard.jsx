@@ -2,8 +2,8 @@ import React, { useEffect } from 'react'
 import useAuth from '../hooks/useAuth'
 import {
   useNavigate,
-  Link,
-  useLocation
+  // Link,
+  // useLocation
 } from 'react-router-dom'
 import { useSendLogoutMutation } from '../auth/authApiSlice'
 
@@ -28,7 +28,7 @@ const Dashboard = () => {
   }, [isSuccess, navigate])
 
   return (
-    <div>
+    <div className='flex-grow'>
       <div>Dashboard</div>
       <section>
         <p>Current User: {username}</p>
