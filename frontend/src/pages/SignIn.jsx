@@ -51,7 +51,13 @@ const SignIn = () => {
       // console.log('Registration successful:', response.data);
     } catch (error) {
       // Display error using react-hot-toast
-      toast.error('Failed to sign in. Please check your credentials.');
+      if (error.status == 401) {
+        toast.error('Invalid email or pasword');
+      } else if (error.status == 429) {
+        toast.error('Too many Login attempts')
+      } else {
+        toast.error('Failed to sign in. Please check your credentials.');
+      }
       console.error('Sign In Error:', error);
     }
   };
@@ -69,9 +75,9 @@ const SignIn = () => {
             className='w-full text-white mb-1 mt-3 text-center font-bold text-2xl'>
             Welcome Back
           </h1>
-          
+
           <p
-          className='text-white/80 w-full text-center text-sm'
+            className='text-white/80 w-full text-center text-sm'
           >Sign into your account</p>
 
           <div
@@ -109,8 +115,8 @@ const SignIn = () => {
             type="submit">
             {
               isLoading ?
-                <div className='text-black'>
-                  <PulseLoader size='sm' />
+                <div className=''>
+                  <PulseLoader size='10px' color='#ffffff' />
                 </div>
                 :
                 'Sign In'
