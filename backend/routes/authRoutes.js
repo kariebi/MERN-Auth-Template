@@ -12,8 +12,8 @@ router.route('/register')
 router.route('/refresh')
     .get(authController.refresh)
 
-// router.route('/profile')
-//     .get(authController.getprofile)
+router.route('/profile')
+    .post(authController.VerifyEmail)
 
 router.route('/logout')
     .post(authController.logout)

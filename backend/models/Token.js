@@ -15,14 +15,10 @@ const TokenSchema = new Schema({
         type: Date,
         default: Date.now,
     },
-    expiredAt: {
+    expiresAt: {
         type: Date,
         default: () => new Date(Date.now() + 5 * 60000), // 5 minutes from now
-    },
-    expired: {
-        type: Boolean,
-        default: false,
-    },
+    }
 });
 
 const TokenModel = mongoose.model('Token', TokenSchema);

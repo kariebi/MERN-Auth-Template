@@ -1,7 +1,7 @@
 const User = require('../models/User')
 const Token = require('../models/Token')
 const jwt = require('jsonwebtoken')
-const { hashPassword, comparePassword , generateRandomToken } = require('../helpers/auth')
+const { hashPassword, comparePassword, generateRandomToken } = require('../helpers/auth')
 
 
 // @desc Register
@@ -99,20 +99,47 @@ const login = async (req, res) => {
 
 }
 
-// @desc Profile
-// // @route GET /auth/profile
-// const getprofile = (req, res) => {
-//     const { token } = req.cookies
-//     if (token) {
-//         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, {},
-//             (err, user) => {
-//                 if (err) throw err;
-//                 res.json(user)
-//             })
-//     } else {
-//         res.json(null)
-//     }
-// }
+// @desc Verify Email
+// @route POST /auth/verifyemail
+const VerifyEmail = async (req, res) => {
+    const { userId, OTP } = req.body;
+
+    try {
+        // Find the token associated with the userId
+        const token = await Token.findOne({ userId }).exec();
+
+        if (!token) {
+            // Token not found
+            return res.status(404).json({ message: 'Token not found', success: false });
+        }
+
+        // Check if the token has expired
+        if (token.expiresAt <= new Date()) {
+            // Token has expired
+            await token.remove(); // Remove the expired token
+            return res.status(401).json({ message: 'Token has expired', success: false });
+        }
+
+        // Check if the provided OTP matches the token's OTP
+        if (token.token !== OTP) {
+            // Incorrect OTP
+            return res.status(401).json({ message: 'Incorrect OTP', success: false });
+        }
+
+        // Update the user to 'verified: true'
+        const user = await User.findByIdAndUpdate(userId, { verified: true }, { new: true }).exec();
+
+        // Remove the token as it's no longer needed
+        await token.remove();
+
+        // Respond with success message and updated user
+        res.status(200).json({ message: 'Email verification successful', success: true, user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', success: false });
+    }
+};
+
 
 
 // @desc Refresh
@@ -164,7 +191,7 @@ const logout = (req, res) => {
 module.exports = {
     login,
     refresh,
-    // getprofile,
+    VerifyEmail,
     register,
     logout
 }

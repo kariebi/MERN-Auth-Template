@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 
 
-const verifyEmail = async (email, token) => {
+const sendOTPEmail = async (email, token) => {
     try {
         let transporter = nodemailer.createTransport({
             service: 'gmail',
@@ -79,7 +79,7 @@ const generateRandomToken = () => {
 
 
 module.exports = {
-  verifyEmail,
+  sendOTPEmail,
   generateRandomToken,
   hashPassword,
   comparePassword,

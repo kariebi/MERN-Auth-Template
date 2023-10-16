@@ -51,9 +51,13 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
     # JWT Secret Keys
     ACCESS_TOKEN_SECRET=myaccess'secretkey
     REFRESH_TOKEN_SECRET=myrefresh'secretkey
+
+    # EMAIL details
+    SENDER_EMAIL='johndoeshouldbeyourpassword@gmail.com'
+    SENDER_PASSWORD='my email password that is probably johndoe'
     ```
 
-    Update the `MONGODB_URI` with your MongoDB connection URI and set a secure value for `ACCESS_TOKEN_SECRET` and `REFRESH_TOKEN_SECRET`.
+    Update the `MONGODB_URI` with your MongoDB connection URI, input your email address for `SENDER_EMAIL` as well as your email password for `SENDER_PASSWORD` and set a secure value for `ACCESS_TOKEN_SECRET` and `REFRESH_TOKEN_SECRET`.
 
 ### Running the Application
 
@@ -78,7 +82,9 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
 ## Usage
 
 - The template provides a basic authentication setup with a login and registration system.
--I will add others like Google OAuth and Role-Based routing system in due time.
+- Users can register and verify their emails with a time based OTP.
+- Users can login normally but can only use the dashboard page after thier emails have been verified.
+-I will add others like Google OAuth so users cna sign up using Google directly in due time
 
 Feel free to customize and build upon this template to suit the needs of your project!
 
