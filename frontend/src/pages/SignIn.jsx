@@ -10,6 +10,7 @@ import PulseLoader from 'react-spinners/PulseLoader'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 
 const SignIn = () => {
   useTitle('SignIn')
@@ -65,15 +66,19 @@ const SignIn = () => {
           className='flex flex-col justify-center'
         >
           <h1
-            className='w-full text-white mb-4 mt-3 text-center font-bold text-2xl'>
+            className='w-full text-white mb-1 mt-3 text-center font-bold text-2xl'>
             Welcome Back
           </h1>
+          
+          <p
+          className='text-white/80 w-full text-center text-sm'
+          >Sign into your account</p>
 
           <div
             className='mt-4 w-full flex bg-white px-3 py-2 rounded-3xl'
           >
             <input
-              className='bg-transparent focus:outline-none'
+              className='bg-transparent focus:outline-none placeholder:text-black/70'
               placeholder='Email'
               type="email"
               value={email}
@@ -86,7 +91,7 @@ const SignIn = () => {
             className='mt-4 w-full flex bg-white px-3 py-2 rounded-3xl'
           >
             <input
-              className='bg-transparent focus:outline-none'
+              className='bg-transparent focus:outline-none placeholder:text-black/70'
               placeholder='Password'
               type={PasswordVisible ? "text" : "password"}
               value={password}
@@ -99,34 +104,48 @@ const SignIn = () => {
                 style={{ color: "#000000", marginLeft: 'auto' }} />
             </div>
           </div>
+          <button
+            className='mt-5 mb-1 w-full justify-center flex transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-3 rounded-lg'
+            type="submit">
+            {
+              isLoading ?
+                <div className='text-black'>
+                  <PulseLoader size='sm' />
+                </div>
+                :
+                'Sign In'
+            }
+          </button>
 
-          <button 
-          className='mt-5 mb-1 w-full justify-center flex bg-white px-3 py-3 rounded-xl'
-          type="submit">Sign In</button>
-
-          <section className='w-full justify-center items-center'>
+          <section className='w-full justify-center items-center '>
             <div
-              className='w-full cursor-pointer justify-center text-center bg-white px-3 py-2 mt-3 rounded-3xl'>
-              Sign in with Google
+              className='w-full cursor-pointer justify-center text-center transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-2 mt-3 rounded-3xl'>
+              <FontAwesomeIcon
+                icon={faGoogle}
+                size="lg"
+                className='px-0.5' />
+              <span>
+                Sign in with Google
+              </span>
             </div>
           </section>
           <section
-          className='w-full text-center text-sm mt-3'
+            className='w-full text-center text-sm mt-3'
           >
             <Link
               to="/register"
-              className='text-gray-400 underline'
-            > 
-            Forgot Password?
+              className='text-gray-400 underline hover:text-white'
+            >
+              Forgot Password?
             </Link>
           </section>
           <section
-          className='w-full text-center text-white text-sm mt-1'
+            className='w-full text-center text-white text-sm mt-1'
           >
             Don't have an account?
             <Link
               to="/register"
-              className='text-gray-400 underline'
+              className='text-gray-400 underline hover:text-white'
             > SignUp</Link>
           </section>
         </form>
