@@ -84,7 +84,7 @@ A  MERN (MongoDB, Express.js, React, Node.js) authentication template using Reac
 - The template provides a basic authentication setup with a login and registration system.
 - Users can register and verify their emails with a time based OTP.
 - Users can login normally but can only use the dashboard page after thier emails have been verified.
--I will add others like Google OAuth so users cna sign up using Google directly in due time
+- I will add others like Google OAuth so users cna sign up using Google directly in due time
 
 Feel free to customize and build upon this template to suit the needs of your project!
 

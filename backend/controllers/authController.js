@@ -104,6 +104,7 @@ const login = async (req, res) => {
 const VerifyEmail = async (req, res) => {
     const { userId, OTP } = req.body;
 
+    
     try {
         // Find the token associated with the userId
         const token = await Token.findOne({ userId }).exec();
