@@ -7,6 +7,7 @@ import usePersist from '../hooks/usePersist'
 import useTitle from '../hooks/useTitle'
 import toast from 'react-hot-toast';
 import PulseLoader from 'react-spinners/PulseLoader'
+import Tag from '../components/Tag'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
@@ -63,7 +64,7 @@ const SignIn = () => {
   };
 
   return (
-    <div className='w-full h-full flex-grow flex justify-center items-center'>
+    <div className='w-full h-full flex-grow flex-col flex justify-center items-center'>
       <section
         className='bg-black/90 max-w-[282px] px-5 py-5 rounded-2xl'
       >
@@ -156,6 +157,9 @@ const SignIn = () => {
           </section>
         </form>
       </section>
+      <div className='mt-0.5'>
+        <Tag small={true} />
+      </div>
     </div>
   );
 };

@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import PulseLoader from 'react-spinners/PulseLoader'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
-
+import Tag from '../components/Tag'
 
 const Register = () => {
   useTitle('Register')
@@ -49,7 +49,7 @@ const Register = () => {
   };
 
   return (
-    <div className='w-full h-full flex-grow flex justify-center items-center'>
+    <div className='w-full h-full flex-col flex-grow flex justify-center items-center'>
       <section
         className='bg-black/90 max-w-[282px] px-5 py-5 rounded-2xl'
       >
@@ -141,6 +141,9 @@ const Register = () => {
           </section>
         </form>
       </section>
+      <div className='mt-0.5'>
+        <Tag small={true} />
+      </div>
     </div>
   );
 };
