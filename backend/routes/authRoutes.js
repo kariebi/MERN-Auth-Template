@@ -12,8 +12,11 @@ router.route('/register')
 router.route('/refresh')
     .get(authController.refresh)
 
-router.route('/profile')
+router.route('/verifyemail')
     .post(authController.VerifyEmail)
+
+router.route('/createnewOTP')
+    .post(authController.createNewOTP)
 
 router.route('/logout')
     .post(authController.logout)

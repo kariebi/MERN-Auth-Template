@@ -6,6 +6,7 @@ const TokenSchema = new Schema({
         type: String,
         ref: 'user',
         required: true,
+        unique: true
     },
     token: {
         type: String,

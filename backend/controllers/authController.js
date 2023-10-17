@@ -1,7 +1,7 @@
 const User = require('../models/User')
 const Token = require('../models/Token')
 const jwt = require('jsonwebtoken')
-const { hashPassword, comparePassword, generateRandomToken } = require('../helpers/auth')
+const { hashPassword, comparePassword, sendOTPEmail, generateRandomToken } = require('../helpers/auth')
 
 
 // @desc Register
@@ -72,6 +72,7 @@ const login = async (req, res) => {
     const accessToken = jwt.sign(
         {
             "UserInfo": {
+                "userId": foundUser._id,
                 "username": foundUser.username,
                 "roles": foundUser.roles
             }
@@ -104,7 +105,7 @@ const login = async (req, res) => {
 const VerifyEmail = async (req, res) => {
     const { userId, OTP } = req.body;
 
-    
+
     try {
         // Find the token associated with the userId
         const token = await Token.findOne({ userId }).exec();
@@ -138,6 +139,40 @@ const VerifyEmail = async (req, res) => {
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error', success: false });
+    }
+};
+
+
+// @desc Create New OTP
+// @route POST /auth/createnewotp
+const createNewOTP = async (req, res) => {
+    try {
+        const { userId, email } = req.body;
+
+        // Check if there is an existing token with the userId
+        const existingToken = await Token.findOne({ userId }).exec();
+
+        // If an existing token is found, delete it
+        if (existingToken) {
+            await existingToken.remove();
+        }
+
+        // Create a new OTP (assuming you have a function for this)
+        const newOTP = generateOTP(); // You need to implement this function
+
+        // Create a new token with the userId and the new OTP
+        const newToken = await Token.create({
+            userId,
+            token: newOTP,
+        });
+
+        // Send OTP email to the user
+        await sendOTPEmail(email, newOTP);
+        console.log(newToken);
+        res.status(200).json({ message: 'New OTP created successfully', newOTP });
+    } catch (error) {
+        console.error('Error creating new OTP:', error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -192,6 +227,7 @@ const logout = (req, res) => {
 module.exports = {
     login,
     refresh,
+    createNewOTP,
     VerifyEmail,
     register,
     logout

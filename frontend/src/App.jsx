@@ -12,6 +12,7 @@ import PersistLogin from './auth/PersistLogin'
 import RequireAuth from './auth/RequireAuth'
 import { ROLES } from './config/roles'
 import useTitle from './hooks/useTitle';
+import OTPVerification from './pages/OTPVerification'
 
 function App() {
   useTitle('MERN AUTH Template')
@@ -24,6 +25,7 @@ function App() {
           <Route index element={<Home />} />
           <Route path='signin' element={<SignIn />} />
           <Route path='register' element={<Register />} />
+          <Route path='otpverification' element={<OTPVerification/>}/>
           {/* Protected Routes */}
           <Route element={<PersistLogin />}>
             <Route element={<RequireAuth allowedRoles={[...Object.values(ROLES)]} />}>

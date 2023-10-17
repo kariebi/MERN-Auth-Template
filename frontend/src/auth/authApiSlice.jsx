@@ -17,6 +17,20 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             })
         }),
+        createOTP: builder.mutation({
+            query: credentials => ({
+                url: '/auth/createnewOTP',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
+        verifyEmail: builder.mutation({
+            query: credentials => ({
+                url: '/auth/verifyemail',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
         sendLogout: builder.mutation({
             query: () => ({
                 url: '/auth/logout',
@@ -55,6 +69,8 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useVerifyEmailMutation,
+    useCreateOTPMutation,
     useLoginMutation,
     useRegisterMutation,
     useSendLogoutMutation,
