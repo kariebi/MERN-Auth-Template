@@ -8,7 +8,7 @@ const sendOTPEmail = async (email, token) => {
             service: 'gmail',
             auth: {
                 user: process.env.SENDER_EMAIL,
-                pass: process.env.SENDER_PASSWORD, 
+                pass: process.env.APP_PASSWORD, 
             },
         });
 

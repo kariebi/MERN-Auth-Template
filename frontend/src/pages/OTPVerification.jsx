@@ -126,7 +126,7 @@ const OTPVerification = () => {
           </>
         ) : (
           <div>
-            <p className='text-sm text-red-500'>Email not found. Redirecting to SignUp Page...</p>
+            <p className='text-md text-red-500'>Email not found. Redirecting to SignUp Page...</p>
           </div>
         )}
       </section>
