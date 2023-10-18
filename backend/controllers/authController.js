@@ -117,36 +117,47 @@ const VerifyOTP = async (req, res) => {
 
         if (!token) {
             // Token not found
+            console.log('Token not found');
             return res.status(404).json({ message: 'Token not found', success: false });
+        }
+
+        // Check if the user is already verified
+        const user = await User.findOne({ email, verified: true }).exec();
+        if (user) {
+            console.log('User is already verified');
+            return res.status(200).json({ message: 'User is already verified', success: true, user });
         }
 
         // Check if the token has expired
         if (token.expiresAt <= new Date()) {
             // Token has expired
             await token.deleteOne(); // Remove the expired token
+            console.log('Token has expired');
             return res.status(401).json({ message: 'Token has expired', success: false });
         }
 
         // Check if the provided OTP matches the token's OTP
         if (token.token !== OTP) {
             // Incorrect OTP
+            console.log('Incorrect OTP');
             return res.status(401).json({ message: 'Incorrect OTP', success: false });
         }
 
         // Update the user to 'verified: true'
-        const user = await User.findOneAndUpdate(email, { verified: true }, { new: true }).exec();
+        const updatedUser = await User.findOneAndUpdate({ email }, { verified: true }, { new: true }).exec();
 
         // Remove the token as it's no longer needed
         await token.deleteOne();
 
         // Respond with success message and updated user
-        console.log(`Email ${email} has been verified`)
-        res.status(200).json({ message: 'Email verification successful', success: true, user });
+        console.log(`Email ${email} has been verified`);
+        res.status(200).json({ message: 'Email verification successful', success: true, user: updatedUser });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error', success: false });
     }
 };
+
 
 
 // @desc Create New OTP
@@ -158,24 +169,29 @@ const createNewOTP = async (req, res) => {
         // Check if there is an existing token with the user's email
         const existingToken = await Token.findOne({ email }).exec();
 
-        // If an existing token is found, delete it
         if (existingToken) {
-            await existingToken.deleteOne();
+            // Update the existing token with a new OTP
+            const newOTP = generateRandomToken();
+            existingToken.token = newOTP;
+            await existingToken.save();
+            await sendOTPEmail(existingToken.email, newOTP);
+            console.log(existingToken);
+            res.status(200).json({ message: 'OTP updated successfully', newOTP });
+        } else {
+            // Create a new OTP
+            const newOTP = generateRandomToken();
+
+            // Create a new token with the userId and the new OTP
+            const newToken = await Token.create({
+                email: email,
+                token: newOTP,
+            });
+
+            // Send OTP email to the user
+            await sendOTPEmail(email, newOTP);
+            console.log(newToken);
+            res.status(200).json({ message: 'New OTP created successfully', newOTP });
         }
-
-        // Create a new OTP (assuming you have a function for this)
-        const newOTP = generateRandomToken(); // You need to implement this function
-
-        // Create a new token with the userId and the new OTP
-        const newToken = await Token.create({
-            email: email,
-            token: newOTP,
-        });
-
-        // Send OTP email to the user
-        await sendOTPEmail(email, newOTP);
-        console.log(newToken);
-        res.status(200).json({ message: 'New OTP created successfully', newOTP });
     } catch (error) {
         console.error('Error creating new OTP:', error);
         res.status(500).json({ message: 'Internal Server Error' });
@@ -211,7 +227,7 @@ const refresh = (req, res) => {
                         "roles": foundUser.roles,
                         "verified": foundUser.verified,
                         "email": foundUser.email,
-                        "userId":foundUser._id,
+                        "userId": foundUser._id,
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,

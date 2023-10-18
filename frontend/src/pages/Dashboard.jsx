@@ -10,7 +10,7 @@ import { useSendLogoutMutation } from '../auth/authApiSlice'
 
 const Dashboard = () => {
   localStorage.removeItem('email')
-  const { username, status, verified } = useAuth()
+  const { username, status, verified, isLoggedIn } = useAuth()
   const navigate = useNavigate()
   // const { pathname } = useLocation()
 
@@ -21,11 +21,18 @@ const Dashboard = () => {
     error
   }] = useSendLogoutMutation()
 
-  console.log(verified)
+  // console.log(verified)
 
   useEffect(() => {
     if (isSuccess) navigate('/')
   }, [isSuccess, navigate])
+
+  useEffect(() => {
+    if (isLoggedIn && !verified) {
+      navigate('/otpverification');
+    }
+  }, [isLoggedIn, verified, navigate]);
+  
 
   return (
     <div className='flex-grow'>

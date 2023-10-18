@@ -34,13 +34,6 @@ const SignIn = () => {
     // console.log(PasswordVisible);
   };
 
-  const CheckUserVerifiedState = () => {
-    if (verified) {
-      navigate('userdashboard')
-    } else {
-      navigate('/otpverification')
-    }
-  }
 
   useEffect(() => {
     emailRef.current.focus()
@@ -58,7 +51,7 @@ const SignIn = () => {
       setPersist(true)
       toast.success('Login Successful')
       localStorage.setItem('email', email)
-      CheckUserVerifiedState()
+      navigate('/userdashboard')
       // console.log('Registration successful:', response.data);
     } catch (error) {
       // Display error using react-hot-toast
