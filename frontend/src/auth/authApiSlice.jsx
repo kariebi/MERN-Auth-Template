@@ -19,14 +19,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
         }),
         createOTP: builder.mutation({
             query: credentials => ({
-                url: '/auth/createnewOTP',
+                url: '/auth/createnewotp',
                 method: 'POST',
                 body: { ...credentials }
             })
         }),
-        verifyEmail: builder.mutation({
+        verifyOTP: builder.mutation({
             query: credentials => ({
-                url: '/auth/verifyemail',
+                url: '/auth/verifyotp',
                 method: 'POST',
                 body: { ...credentials }
             })
@@ -69,7 +69,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useVerifyEmailMutation,
+    useVerifyOTPMutation,
     useCreateOTPMutation,
     useLoginMutation,
     useRegisterMutation,

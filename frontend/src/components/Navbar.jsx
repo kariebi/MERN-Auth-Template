@@ -21,9 +21,9 @@ const Navbar = () => {
       </div>
       <div
         className='text-white/70'>
-        <Link
+        {/* <Link
           className='px-1 hover:text-white transition duration-300'
-          to="/">Home</Link>
+          to="/">Home</Link> */}
         {isLoggedIn ?
           <>
             <Link

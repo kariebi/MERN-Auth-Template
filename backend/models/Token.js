@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const TokenSchema = new Schema({
-    userId: {
+    email: {
         type: String,
         ref: 'user',
         required: true,

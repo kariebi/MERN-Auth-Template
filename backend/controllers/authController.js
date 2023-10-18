@@ -36,9 +36,13 @@ const register = async (req, res) => {
         })
 
         const token = await Token.create({
-            userId: user._id,
+            email: user.email,
             token: generateRandomToken(),
         });
+
+        const newOTP = generateRandomToken()
+        await sendOTPEmail(user.email, newOTP);
+
         console.log(token)
         return res.json(user)
     } catch (error) {
@@ -73,6 +77,8 @@ const login = async (req, res) => {
         {
             "UserInfo": {
                 "userId": foundUser._id,
+                "verified": foundUser.verified,
+                "email": foundUser.email,
                 "username": foundUser.username,
                 "roles": foundUser.roles
             }
@@ -100,15 +106,14 @@ const login = async (req, res) => {
 
 }
 
-// @desc Verify Email
+// @desc Verify Email using OTP
 // @route POST /auth/verifyemail
-const VerifyEmail = async (req, res) => {
-    const { userId, OTP } = req.body;
-
+const VerifyOTP = async (req, res) => {
+    const { email, OTP } = req.body;
 
     try {
-        // Find the token associated with the userId
-        const token = await Token.findOne({ userId }).exec();
+        // Find the token associated with the user's email
+        const token = await Token.findOne({ email }).exec();
 
         if (!token) {
             // Token not found
@@ -118,7 +123,7 @@ const VerifyEmail = async (req, res) => {
         // Check if the token has expired
         if (token.expiresAt <= new Date()) {
             // Token has expired
-            await token.remove(); // Remove the expired token
+            await token.deleteOne(); // Remove the expired token
             return res.status(401).json({ message: 'Token has expired', success: false });
         }
 
@@ -129,12 +134,13 @@ const VerifyEmail = async (req, res) => {
         }
 
         // Update the user to 'verified: true'
-        const user = await User.findByIdAndUpdate(userId, { verified: true }, { new: true }).exec();
+        const user = await User.findOneAndUpdate(email, { verified: true }, { new: true }).exec();
 
         // Remove the token as it's no longer needed
-        await token.remove();
+        await token.deleteOne();
 
         // Respond with success message and updated user
+        console.log(`Email ${email} has been verified`)
         res.status(200).json({ message: 'Email verification successful', success: true, user });
     } catch (error) {
         console.error(error);
@@ -147,22 +153,22 @@ const VerifyEmail = async (req, res) => {
 // @route POST /auth/createnewotp
 const createNewOTP = async (req, res) => {
     try {
-        const { userId, email } = req.body;
+        const { email } = req.body;
 
-        // Check if there is an existing token with the userId
-        const existingToken = await Token.findOne({ userId }).exec();
+        // Check if there is an existing token with the user's email
+        const existingToken = await Token.findOne({ email }).exec();
 
         // If an existing token is found, delete it
         if (existingToken) {
-            await existingToken.remove();
+            await existingToken.deleteOne();
         }
 
         // Create a new OTP (assuming you have a function for this)
-        const newOTP = generateOTP(); // You need to implement this function
+        const newOTP = generateRandomToken(); // You need to implement this function
 
         // Create a new token with the userId and the new OTP
         const newToken = await Token.create({
-            userId,
+            email: email,
             token: newOTP,
         });
 
@@ -202,7 +208,10 @@ const refresh = (req, res) => {
                 {
                     "UserInfo": {
                         "username": foundUser.username,
-                        "roles": foundUser.roles
+                        "roles": foundUser.roles,
+                        "verified": foundUser.verified,
+                        "email": foundUser.email,
+                        "userId":foundUser._id,
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
@@ -213,6 +222,7 @@ const refresh = (req, res) => {
         }
     )
 }
+
 
 // @desc Logout
 // @route POST /auth/logout
@@ -228,7 +238,7 @@ module.exports = {
     login,
     refresh,
     createNewOTP,
-    VerifyEmail,
+    VerifyOTP,
     register,
     logout
 }

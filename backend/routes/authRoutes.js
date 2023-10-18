@@ -12,10 +12,10 @@ router.route('/register')
 router.route('/refresh')
     .get(authController.refresh)
 
-router.route('/verifyemail')
-    .post(authController.VerifyEmail)
+router.route('/verifyotp')
+    .post(authController.VerifyOTP)
 
-router.route('/createnewOTP')
+router.route('/createnewotp')
     .post(authController.createNewOTP)
 
 router.route('/logout')

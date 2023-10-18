@@ -9,8 +9,8 @@ import { useSendLogoutMutation } from '../auth/authApiSlice'
 
 
 const Dashboard = () => {
-
-  const { username, status } = useAuth()
+  localStorage.removeItem('email')
+  const { username, status, verified } = useAuth()
   const navigate = useNavigate()
   // const { pathname } = useLocation()
 
@@ -21,7 +21,7 @@ const Dashboard = () => {
     error
   }] = useSendLogoutMutation()
 
-
+  console.log(verified)
 
   useEffect(() => {
     if (isSuccess) navigate('/')
@@ -33,6 +33,7 @@ const Dashboard = () => {
       <section>
         <p>Current User: {username}</p>
         <p>Status: {status}</p>
+        <p>Email Verified: {verified}</p>
       </section>
       <button
         className=""

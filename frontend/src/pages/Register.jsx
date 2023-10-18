@@ -7,11 +7,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import PulseLoader from 'react-spinners/PulseLoader'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
+import useAuth from '../hooks/useAuth';
 import Tag from '../components/Tag'
 
 const Register = () => {
   useTitle('Register')
 
+  const { verified } = useAuth()
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -34,11 +36,12 @@ const Register = () => {
       if (response.error) {
         toast.error(response.error)
       } else {
+        localStorage.setItem('email', email)
         setName('')
         setEmail('')
         setPassword('')
         toast.success('Registration Successful')
-        navigate('/signin')
+        navigate('/otpverification')
       }
       // console.log('Registration successful:', response.data);
     } catch (error) {
@@ -60,7 +63,7 @@ const Register = () => {
             SignUp
           </h1>
           <p
-          className='text-white/80 w-full text-center text-sm'
+            className='text-white/80 w-full text-center text-sm'
           >Let's get you started</p>
           <div
             className='mt-4 w-full flex bg-white px-3 py-2 rounded-3xl'

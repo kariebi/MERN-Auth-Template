@@ -8,6 +8,7 @@ import useTitle from '../hooks/useTitle'
 import toast from 'react-hot-toast';
 import PulseLoader from 'react-spinners/PulseLoader'
 import Tag from '../components/Tag'
+import useAuth from '../hooks/useAuth'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
@@ -16,7 +17,7 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 const SignIn = () => {
   useTitle('SignIn')
 
-
+  const { verified } = useAuth()
   const emailRef = useRef()
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -26,12 +27,20 @@ const SignIn = () => {
   const [PasswordVisible, setPasswordVisibility] = useState(false);
 
   const [login, { isLoading }] = useLoginMutation()
-  const handleToggle = () => setPersist(prev => !prev)
+  // const handleToggle = () => setPersist(prev => !prev)
 
   const HandlePasswordVisibility = () => {
     setPasswordVisibility(!PasswordVisible);
     // console.log(PasswordVisible);
   };
+
+  const CheckUserVerifiedState = () => {
+    if (verified) {
+      navigate('userdashboard')
+    } else {
+      navigate('/otpverification')
+    }
+  }
 
   useEffect(() => {
     emailRef.current.focus()
@@ -48,7 +57,8 @@ const SignIn = () => {
       setPassword('')
       setPersist(true)
       toast.success('Login Successful')
-      navigate('/userdashboard')
+      localStorage.setItem('email', email)
+      CheckUserVerifiedState()
       // console.log('Registration successful:', response.data);
     } catch (error) {
       // Display error using react-hot-toast
