@@ -35,11 +35,18 @@ const ForgotPassword = () => {
         e.preventDefault();
         setSendOTPLoading(true);
         try {
-            await sendOTP({ email });
-            setEmailSubmitted(true);
-            toast.success('OTP sent successfully!');
+            const response = await sendOTP({ email });
+            // console.log(response)
+            if (response.error.data) {
+                toast.error(response.error.data.error);
+                // console.log(response.error.data.error);
+                navigate('/signin')
+            } else {
+                toast.success('OTP sent successfully!');
+                setEmailSubmitted(true);
+            }
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             toast.error('Failed to send OTP. Please try again.');
         } finally {
             setSendOTPLoading(false);

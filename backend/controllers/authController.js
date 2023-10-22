@@ -176,7 +176,7 @@ const createNewOTP = async (req, res) => {
             await existingToken.save();
             await sendOTPEmail(existingToken.email, newOTP);
             console.log(existingToken);
-            res.status(200).json({ message: 'OTP updated successfully', newOTP });
+            return res.status(200).json({ message: 'OTP updated successfully', newOTP });
         } else {
             // Create a new OTP
             const newOTP = generateRandomToken();
@@ -191,11 +191,11 @@ const createNewOTP = async (req, res) => {
             // Send OTP email to the user
             await sendOTPEmail(email, newOTP);
             console.log(newToken);
-            res.status(200).json({ message: 'New OTP created successfully', newOTP });
+            return res.status(200).json({ message: 'New OTP created successfully', newOTP });
         }
     } catch (error) {
         console.error('Error creating new OTP:', error);
-        res.status(500).json({ message: 'Internal Server Error' });
+        return res.status(500).json({ message: 'Internal Server Error' });
     }
 };
 
@@ -210,7 +210,8 @@ const sendForgotPasswordOTP = async (req, res) => {
         const user = await User.findOne({ email }).exec();
 
         if (!user || !user.active) {
-            return res.status(404).json({ message: 'User not found', success: false });
+            console.log(`User not found with ${email} email`)
+            return res.status(401).json({ error: 'User not found', success: false });
         }
 
         // Create a new OTP
@@ -228,10 +229,10 @@ const sendForgotPasswordOTP = async (req, res) => {
 
         console.log(newToken);
 
-        res.status(200).json({ message: 'OTP sent successfully', success: true });
+        return res.status(200).json({ message: 'OTP sent successfully', success: true });
     } catch (error) {
         console.error('Error sending OTP:', error);
-        res.status(500).json({ message: 'Internal Server Error', success: false });
+        return res.status(500).json({ message: 'Internal Server Error', success: false });
     }
 };
 
