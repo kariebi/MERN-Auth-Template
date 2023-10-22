@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
+//Token for useremail verification
 const TokenSchema = new Schema({
     email: {
         type: String,
@@ -11,6 +12,10 @@ const TokenSchema = new Schema({
     token: {
         type: String,
         required: true,
+    },
+    purpose: {
+        type: String, //either 'email' or 'forgotpassword'
+        required: true
     },
     createdAt: {
         type: Date,

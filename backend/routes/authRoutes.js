@@ -21,4 +21,13 @@ router.route('/createnewotp')
 router.route('/logout')
     .post(authController.logout)
 
+router.route('/forgotpassword/sendotp')
+    .post(authController.sendForgotPasswordOTP);
+
+router.route('/forgotpassword/verifyotp')
+    .post(authController.verifyForgotPasswordOTP);
+
+router.route('/forgotpassword/reset')
+    .post(authController.resetPassword);
+
 module.exports = router

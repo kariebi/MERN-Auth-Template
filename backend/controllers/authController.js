@@ -8,48 +8,48 @@ const { hashPassword, comparePassword, sendOTPEmail, generateRandomToken } = req
 // @route POST /auth
 // @access Public
 const register = async (req, res) => {
-    const { name, email, password } = req.body
+    const { name, email, password } = req.body;
     try {
         if (!name) {
             return res.json({
-                error: 'Name is Required'
-            })
+                error: 'Name is Required',
+            });
         }
         if (!password || password.length < 10) {
             return res.json({
-                error: 'Password is Required and should be at least 10 characters long'
-            })
+                error: 'Password is Required and should be at least 10 characters long',
+            });
         }
-        const exist = await User.findOne({ email })
+        const exist = await User.findOne({ email });
         if (exist) {
             return res.json({
-                error: 'Email is already taken'
-            })
+                error: 'Email is already taken',
+            });
         }
 
-        const hashedpassword = await hashPassword(password)
+        const hashedpassword = await hashPassword(password);
 
         const user = await User.create({
             username: name,
             email: email,
-            password: hashedpassword
-        })
+            password: hashedpassword,
+        });
 
         const token = await Token.create({
             email: user.email,
             token: generateRandomToken(),
+            purpose: 'email', // Set the purpose for email verification
         });
 
-        const newOTP = generateRandomToken()
+        const newOTP = generateRandomToken();
         await sendOTPEmail(user.email, newOTP);
 
-        console.log(token)
-        return res.json(user)
+        console.log(token);
+        return res.json(user);
     } catch (error) {
-        console.log(error)
+        console.log(error);
     }
-}
-
+};
 
 
 
@@ -112,8 +112,8 @@ const VerifyOTP = async (req, res) => {
     const { email, OTP } = req.body;
 
     try {
-        // Find the token associated with the user's email
-        const token = await Token.findOne({ email }).exec();
+        // Find the token associated with the user's email and purpose
+        const token = await Token.findOne({ email, purpose: 'email' }).exec();
 
         if (!token) {
             // Token not found
@@ -185,6 +185,7 @@ const createNewOTP = async (req, res) => {
             const newToken = await Token.create({
                 email: email,
                 token: newOTP,
+                purpose: 'email',
             });
 
             // Send OTP email to the user
@@ -198,7 +199,128 @@ const createNewOTP = async (req, res) => {
     }
 };
 
+// @desc Send OTP for password reset
+// @route POST /auth/forgotpassword/sendotp
+// @access Public
+const sendForgotPasswordOTP = async (req, res) => {
+    const { email } = req.body;
 
+    try {
+        // Check if the user exists
+        const user = await User.findOne({ email }).exec();
+
+        if (!user || !user.active) {
+            return res.status(404).json({ message: 'User not found', success: false });
+        }
+
+        // Create a new OTP
+        const newOTP = generateRandomToken();
+
+        // Create a new token with the email, the new OTP, and purpose 'forgotpassword'
+        const newToken = await Token.create({
+            email: email,
+            token: newOTP,
+            purpose: 'forgotpassword',
+        });
+
+        // Send OTP email to the user
+        await sendOTPEmail(email, newOTP);
+
+        console.log(newToken);
+
+        res.status(200).json({ message: 'OTP sent successfully', success: true });
+    } catch (error) {
+        console.error('Error sending OTP:', error);
+        res.status(500).json({ message: 'Internal Server Error', success: false });
+    }
+};
+
+// @desc Verify OTP for password reset
+// @route POST /auth/forgotpassword/verifyotp
+// @access Public
+const verifyForgotPasswordOTP = async (req, res) => {
+    const { email, OTP } = req.body;
+
+    try {
+        // Find the token associated with the user's email and purpose 'forgotpassword'
+        const token = await Token.findOne({ email, purpose: 'forgotpassword' }).exec();
+
+        if (!token) {
+            // Token not found
+            console.log('Token not found');
+            return res.status(404).json({ message: 'Token not found', success: false });
+        }
+
+        // Check if the token has expired
+        if (token.expiresAt <= new Date()) {
+            // Token has expired
+            await token.deleteOne(); // Remove the expired token
+            console.log('Token has expired');
+            return res.status(401).json({ message: 'Token has expired', success: false });
+        }
+
+        // Check if the provided OTP matches the token's OTP
+        if (token.token !== OTP) {
+            // Incorrect OTP
+            console.log('Incorrect OTP');
+            return res.status(401).json({ message: 'Incorrect OTP', success: false });
+        }
+
+        // Respond with success message
+        console.log(`OTP for password reset verified`);
+        res.status(200).json({ message: 'OTP verification successful', success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', success: false });
+    }
+};
+
+// @desc Reset password
+// @route POST /auth/forgotpassword/reset
+// @access Public
+const resetPassword = async (req, res) => {
+    const { email, OTP, password } = req.body;
+
+    try {
+        // Find the token associated with the user's email and purpose 'forgotpassword'
+        const token = await Token.findOne({ email, purpose: 'forgotpassword' }).exec();
+
+        if (!token) {
+            // Token not found
+            console.log('Token not found');
+            return res.status(404).json({ message: 'Token not found', success: false });
+        }
+
+        // Check if the token has expired
+        if (token.expiresAt <= new Date()) {
+            // Token has expired
+            await token.deleteOne(); // Remove the expired token
+            console.log('Token has expired');
+            return res.status(401).json({ message: 'Token has expired', success: false });
+        }
+
+        // Check if the provided OTP matches the token's OTP
+        if (token.token !== OTP) {
+            // Incorrect OTP
+            console.log('Incorrect OTP');
+            return res.status(401).json({ message: 'Incorrect OTP', success: false });
+        }
+
+        // Update the user's password
+        const hashedPassword = await hashPassword(password);
+        await User.findOneAndUpdate({ email }, { password: hashedPassword }, { new: true }).exec();
+
+        // Remove the token as it's no longer needed
+        await token.deleteOne();
+
+        // Respond with success message
+        console.log(`Password reset successful`);
+        res.status(200).json({ message: 'Password reset successful', success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error', success: false });
+    }
+};
 
 // @desc Refresh
 // @route GET /auth/refresh
@@ -255,6 +377,9 @@ module.exports = {
     refresh,
     createNewOTP,
     VerifyOTP,
+    sendForgotPasswordOTP,
+    verifyForgotPasswordOTP,
+    resetPassword,
     register,
     logout
 }

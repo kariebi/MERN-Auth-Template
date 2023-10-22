@@ -36,21 +36,23 @@ export const authApiSlice = apiSlice.injectEndpoints({
         // send OTP for user's password recreation
         sendForgotPasswordOTP: builder.mutation({
             query: credentials => ({
-                url: 'auth/sendforgotpasswordotp',
+                url: 'auth/forgotpassword/sendotp',
                 method: 'POST',
                 body: { ...credentials }
             })
         }),
+        // verify the email otp when the user sends the otp
         verifyForgotPasswordOTP: builder.mutation({
             query: credentials => ({
-                url: 'auth/verifyforgotpasswordotp',
+                url: 'auth/forgotpassword/verifyotp',
                 method: 'POST',
                 body: { ...credentials }
             })
         }),
+        //use the otp, email and password to reset the password
         ResetPassword: builder.mutation({
             query: credentials => ({
-                url: 'auth/verifyforgotpasswordotp',
+                url: 'auth/forgotpassword/reset',
                 method: 'POST',
                 body: { ...credentials }
             })
