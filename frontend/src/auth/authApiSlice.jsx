@@ -17,6 +17,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             })
         }),
+        // To send the OTP for the user's email
         createOTP: builder.mutation({
             query: credentials => ({
                 url: '/auth/createnewotp',
@@ -24,9 +25,32 @@ export const authApiSlice = apiSlice.injectEndpoints({
                 body: { ...credentials }
             })
         }),
+        // To verify the OTP for the user's email
         verifyOTP: builder.mutation({
             query: credentials => ({
                 url: '/auth/verifyotp',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
+        // send OTP for user's password recreation
+        sendForgotPasswordOTP: builder.mutation({
+            query: credentials => ({
+                url: 'auth/sendforgotpasswordotp',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
+        verifyForgotPasswordOTP: builder.mutation({
+            query: credentials => ({
+                url: 'auth/verifyforgotpasswordotp',
+                method: 'POST',
+                body: { ...credentials }
+            })
+        }),
+        ResetPassword: builder.mutation({
+            query: credentials => ({
+                url: 'auth/verifyforgotpasswordotp',
                 method: 'POST',
                 body: { ...credentials }
             })
@@ -39,7 +63,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
             async onQueryStarted(arg, { dispatch, queryFulfilled }) {
                 try {
                     const { data } = await queryFulfilled
-                    console.log(data)
+                    // console.log(data)
                     dispatch(logOut())
                     setTimeout(() => {
                         dispatch(apiSlice.util.resetApiState())
@@ -69,6 +93,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
+    useResetPasswordMutation,
+    useVerifyForgotPasswordOTPMutation,
+    useSendForgotPasswordOTPMutation,
     useVerifyOTPMutation,
     useCreateOTPMutation,
     useLoginMutation,

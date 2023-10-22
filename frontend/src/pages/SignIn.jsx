@@ -143,7 +143,7 @@ const SignIn = () => {
             className='w-full text-center text-sm mt-3'
           >
             <Link
-              to="/register"
+              to="/forgotpassword"
               className='text-gray-400 underline hover:text-white'
             >
               Forgot Password?

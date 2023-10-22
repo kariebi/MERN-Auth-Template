@@ -35,15 +35,14 @@ const Dashboard = () => {
   
 
   return (
-    <div className='flex-grow'>
+    <div className='flex-grow px-2 pt-2'>
       <div>Dashboard</div>
       <section>
         <p>Current User: {username}</p>
         <p>Status: {status}</p>
-        <p>Email Verified: {verified}</p>
       </section>
       <button
-        className=""
+        className="text-white bg-black/90 px-2 py-1  rounded hover:text-black hover:bg-black/50 "
         title="Logout"
         onClick={sendLogout}
       >
