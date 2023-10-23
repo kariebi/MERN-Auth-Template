@@ -118,7 +118,7 @@ const Register = () => {
             type="submit">
             {
               isLoading ?
-                <div className='text-black'>
+                <div className='text-white'>
                   <PulseLoader size='8px' />
                 </div>
                 :
