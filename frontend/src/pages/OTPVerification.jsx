@@ -7,7 +7,7 @@ import useTitle from '../hooks/useTitle';
 
 const OTPVerification = () => {
   useTitle('Email Verification')
-  
+
   const [resendTimer, setResendTimer] = useState(60);
   const { email: userEmail } = useAuth();
   const navigate = useNavigate();
@@ -22,8 +22,13 @@ const OTPVerification = () => {
   const createOTPcode = async () => {
     try {
       const response = await createOTP({ email }).unwrap();
-      toast.success('Your OTP has been sent!');
-      localStorage.setItem('hasSentOTP', 'true');
+      if (response.error) {
+        console.log(response.error)
+        toast.error(response.error.data.message);
+      } else {
+        toast.success('Your OTP has been sent!');
+        localStorage.setItem('hasSentOTP', 'true');
+      }
       setResendTimer(60);
     } catch (error) {
       console.error(error);
@@ -33,14 +38,19 @@ const OTPVerification = () => {
   const ConfirmOTP = async () => {
     try {
       const response = await verifyOTP({ email, OTP }).unwrap();
-      toast.success('Email verified successfully');
-      if (localStorage.getItem('email')) {
-        localStorage.removeItem('email');
+      if (response.error) {
+        console.log(response.error)
+        toast.error(response.error.data.message);
+      } else {
+        toast.success('Email verified successfully');
+        if (localStorage.getItem('email')) {
+          localStorage.removeItem('email');
+        }
+        if (localStorage.getItem('hasSentOTP')) {
+          localStorage.removeItem('hasSentOTP');
+        }
+        navigate('/signin');
       }
-      if (localStorage.getItem('hasSentOTP')) {
-        localStorage.removeItem('hasSentOTP');
-      }
-      navigate('/signin');
     } catch (error) {
       toast.error('Error');
       console.log('Error:', error);

@@ -113,8 +113,6 @@ const Register = () => {
                 style={{ color: "#000000", marginLeft: 'auto' }} />
             </div>
           </div>
-
-
           <button
             className='mt-5 mb-1 w-full justify-center flex transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-3 rounded-lg'
             type="submit">
