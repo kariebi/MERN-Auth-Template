@@ -13,6 +13,8 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
 - **JWT (JSON Web Tokens) for Authentication**: JSON Web Tokens are used for secure authentication between the frontend and backend.
 - **Customizable**: Easily customizable to fit your project's specific requirements.
 
+**I HAVE'NT ADDED GOOGLE AUTH FUNCTIONALITY YET! JUST A BUTTON! If you want me to add it, please let me know.**
+
 ## Getting Started
 
 ### Prerequisites
