@@ -1,5 +1,5 @@
 # MERN Auth Template
-
+<h4>Created by Kariebi</h4>
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
 
 ## Features
@@ -46,11 +46,11 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
 
     ```env
     # MongoDB Connection URI
-    MONGODB_URI=mongodb://localhost:27017/mern-auth
+    MONGODB_URI='link to your MongoDB URL'
 
     # JWT Secret Keys
-    ACCESS_TOKEN_SECRET=myaccess'secretkey
-    REFRESH_TOKEN_SECRET=myrefresh'secretkey
+    ACCESS_TOKEN_SECRET='myaccess'secretkey' **12 to 24 random characters**
+    REFRESH_TOKEN_SECRET='myrefresh'secretkey' **12 to 24 random characters**
 
     # EMAIL details
     SENDER_EMAIL='your-email@gmail.com'
