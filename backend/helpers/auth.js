@@ -21,7 +21,7 @@ const sendOTPEmail = async (email, token) => {
     
             <p>Your one-time Email verification code is:</p>
     
-            <h2 style="color: #007bff; font-size: 24px;">${token}</h2>
+            <h2 style="color: #333; font-size: 24px;">${token}</h2>
     
             <p>Copy the link and Paste it to verify the Email</p>
     
