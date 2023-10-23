@@ -1,5 +1,7 @@
 # MERN Auth Template
 <h4>Created by Kariebi</h4>
+Star this Repo⭐
+
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
 
 ## Features
