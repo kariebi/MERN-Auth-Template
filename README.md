@@ -49,8 +49,8 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
     MONGODB_URI='link to your MongoDB URL'
 
     # JWT Secret Keys
-    ACCESS_TOKEN_SECRET='myaccess'secretkey' **12 to 24 random characters**
-    REFRESH_TOKEN_SECRET='myrefresh'secretkey' **12 to 24 random characters**
+    ACCESS_TOKEN_SECRET='myaccess'secretkey' *12 to 24 random characters
+    REFRESH_TOKEN_SECRET='myrefresh'secretkey' *12 to 24 random characters
 
     # EMAIL details
     SENDER_EMAIL='your-email@gmail.com'
@@ -107,8 +107,8 @@ If you are using Gmail for sending emails in your application, you'll need to ge
 - Users can register and verify their emails with a time-based OTP.
 - Users can log in normally but can only use the dashboard page after their emails have been verified.
 
-## Star this cause:
-- I will be adding Google OAuth so users can signin and login directly with a click of a button and maybe Github OAuth . Plus, I will also be refining it so star it to keep it on the watch.
+## Star this ⭐:
+- I will be adding Google-OAuth so users can Register/signup and Signin/login directly with a click of a button and maybe Github-OAuth. Plus, I will also be refining it depending on the feedback given so please star it to keep it on the watch.
 
 <!-- ## Demo Video
 
