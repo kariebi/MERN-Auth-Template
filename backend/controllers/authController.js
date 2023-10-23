@@ -221,27 +221,40 @@ const sendForgotPasswordOTP = async (req, res) => {
             return res.status(401).json({ error: 'User not found', success: false });
         }
 
-        // Create a new OTP
-        const newOTP = generateRandomToken();
+        // Check if there is an existing token with the user's email and purpose 'forgotpassword'
+        const existingToken = await Token.findOne({ email, purpose: 'forgotpassword' }).exec();
 
-        // Create a new token with the email, the new OTP, and purpose 'forgotpassword'
-        const newToken = await Token.create({
-            email: email,
-            token: newOTP,
-            purpose: 'forgotpassword',
-        });
+        if (existingToken) {
+            // Update the existing token with a new OTP
+            const newOTP = generateRandomToken();
+            existingToken.token = newOTP;
+            await existingToken.save();
+            await sendOTPEmail(existingToken.email, newOTP);
+            console.log(existingToken);
+            return res.status(200).json({ message: 'OTP updated successfully', success: true });
+        } else {
+            // Create a new OTP
+            const newOTP = generateRandomToken();
 
-        // Send OTP email to the user
-        await sendOTPEmail(email, newOTP);
+            // Create a new token with the email, the new OTP, and purpose 'forgotpassword'
+            const newToken = await Token.create({
+                email: email,
+                token: newOTP,
+                purpose: 'forgotpassword',
+            });
 
-        console.log(newToken);
-
-        return res.status(200).json({ message: 'OTP sent successfully', success: true });
+            // Send OTP email to the user
+            await sendOTPEmail(email, newOTP);
+            console.log(newToken);
+            return res.status(200).json({ message: 'OTP sent successfully', success: true });
+        }
     } catch (error) {
         console.error('Error sending OTP:', error);
+        console.error(error.stack); // Log the stack trace
         return res.status(500).json({ message: 'Internal Server Error', success: false });
     }
 };
+
 
 // @desc Verify OTP for password reset
 // @route POST /auth/forgotpassword/verifyotp
