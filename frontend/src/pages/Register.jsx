@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import { useRegisterMutation } from '../auth/authApiSlice';
@@ -36,11 +36,12 @@ const Register = () => {
       if (response.error) {
         toast.error(response.error)
       } else {
+        localStorage.setItem('hasSentOTP', 'true');
         localStorage.setItem('email', email)
+        toast.success('Registration Successful')
         setName('')
         setEmail('')
         setPassword('')
-        toast.success('Registration Successful')
         navigate('/otpverification')
       }
       // console.log('Registration successful:', response.data);
@@ -50,6 +51,11 @@ const Register = () => {
       console.error('Registration Error:', error);
     }
   };
+  useEffect(() => {
+    if (localStorage.getItem('hasSentOTP')) {
+      localStorage.removeItem('hasSentOTP')
+    }
+  }, [])
 
   return (
     <div className='w-full h-full flex-col flex-grow flex justify-center items-center'>

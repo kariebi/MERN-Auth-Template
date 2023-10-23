@@ -11,17 +11,20 @@ const register = async (req, res) => {
     const { name, email, password } = req.body;
     try {
         if (!name) {
+            console.log(`Name required for ${email}`)
             return res.json({
                 error: 'Name is Required',
             });
         }
         if (!password || password.length < 10) {
+            console.log(`Password required or below 10 characters: ${email}`)
             return res.json({
                 error: 'Password is Required and should be at least 10 characters long',
             });
         }
         const exist = await User.findOne({ email });
         if (exist) {
+            console.log(`User with email ${email} already exists`)
             return res.json({
                 error: 'Email is already taken',
             });
@@ -35,17 +38,21 @@ const register = async (req, res) => {
             password: hashedpassword,
         });
 
+        const newOTP = generateRandomToken();
+
         const token = await Token.create({
             email: user.email,
-            token: generateRandomToken(),
-            purpose: 'email', // Set the purpose for email verification
+            token: newOTP,
+            purpose: 'email',
         });
 
-        const newOTP = generateRandomToken();
         await sendOTPEmail(user.email, newOTP);
 
-        console.log(token);
-        return res.json(user);
+        console.log(token, user);
+        return res.json({
+            status: 200,
+            message: 'Registered Successfully'
+        });
     } catch (error) {
         console.log(error);
     }
@@ -151,7 +158,7 @@ const VerifyOTP = async (req, res) => {
 
         // Respond with success message and updated user
         console.log(`Email ${email} has been verified`);
-        res.status(200).json({ message: 'Email verification successful', success: true, user: updatedUser });
+        return res.status(200).json({ message: 'Email verification successful', success: true, user: updatedUser });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Internal Server Error', success: false });

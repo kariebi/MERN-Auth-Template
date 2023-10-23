@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { useVerifyOTPMutation, useCreateOTPMutation } from '../auth/authApiSlice';
 import useAuth from '../hooks/useAuth';
+import useTitle from '../hooks/useTitle';
 
 const OTPVerification = () => {
+  useTitle('Email Verification')
+  
   const [resendTimer, setResendTimer] = useState(60);
   const { email: userEmail } = useAuth();
   const navigate = useNavigate();
