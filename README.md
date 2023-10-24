@@ -1,6 +1,7 @@
 # MERN Auth Template
 <h4>Created by Kariebi</h4>
-Star this Repo⭐
+
+**Star this Repo⭐**
 
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
 
@@ -10,6 +11,7 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
 - **Tailwind CSS for Styling**: The UI of this app also implemented TailwindCSS, for easy and easily adjustable styling.
 - **Fortawesome icons**: This template also uses icons gotten from the Fortawesome library.
 - **Express.js for Backend API**: The backend API is powered by Express.js, a minimal and flexible Node.js web application framework.
+- **NodeMailer in Express for Emailing  Users**: Used Nodemailer for emailing users their one-time passwords for email verification and password recovery.
 - **MongoDB for Database**: MongoDB is used as the database to store user authentication information.
 - **Authentication Middleware**: The template includes middleware for user authentication, making it easy to secure routes.
 - **JWT (JSON Web Tokens) for Authentication**: JSON Web Tokens are used for secure authentication between the frontend and backend.
