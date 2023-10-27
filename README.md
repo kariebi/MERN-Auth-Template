@@ -5,7 +5,11 @@
 
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
 
-https://video.twimg.com/ext_tw_video/1716576366605316096/pu/vid/avc1/1280x720/tEQL34Oujoh9NCYq.mp4
+<video width="1280" height="720" controls>
+  <source src="https://video.twimg.com/ext_tw_video/1716576366605316096/pu/vid/avc1/1280x720/tEQL34Oujoh9NCYq.mp4" type="video/mp4">
+  <!-- Your browser does not support the video tag. -->
+</video>
+
 
 ## Features
 
@@ -118,9 +122,4 @@ If you are using Gmail for sending emails in your application, you'll need to ge
 ## Star this ⭐:
 - I will be adding Google-OAuth so users can Register/signup and Signin/login directly with a click of a button and maybe Github-OAuth. Plus, I will also be refining it depending on the feedback given so please star it to keep it on the watch.
 
-<!-- ## Demo Video
-
-Watch the demo video for a quick overview of the MERN Auth Template:
-
-[![MERN Auth Template Demo](link_to_your_video_thumbnail)](link_to_your_video) -->
 
