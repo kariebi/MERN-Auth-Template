@@ -5,7 +5,7 @@
 
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
 
-![](video/kariebi.mp4)
+![](kariebi.mp4)
 
 ## Features
 
