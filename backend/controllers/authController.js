@@ -1,8 +1,12 @@
 const User = require('../models/User')
 const Token = require('../models/Token')
 const jwt = require('jsonwebtoken')
+const { OAuth2Client } = require('google-auth-library');
 const { hashPassword, comparePassword, sendOTPEmail, generateRandomToken } = require('../helpers/auth')
+require('dotenv').config();
 
+// Google OAuth Config
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // @desc Register
 // @route POST /auth
@@ -112,6 +116,70 @@ const login = async (req, res) => {
     res.json({ accessToken })
 
 }
+
+
+// @desc Login/Signup using Google
+// @route POST /auth/google
+// @access Public
+const GoogleHandler = async (req, res) => {
+    const { tokenId } = req.body;
+
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: tokenId,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+
+        const { name, email } = ticket.getPayload();
+
+        // Check if the user is already registered in the database
+        let user = await User.findOne({ email }).exec();
+
+        if (!user) {
+            // If not registered, create a new user without a password
+            user = await User.create({
+                username: name,
+                email: email,
+                verified: true, // Assuming Google provides verified emails
+                isGoogleUser: true, // Add a flag to indicate Google user
+            });
+        }
+
+        const accessToken = jwt.sign(
+            {
+                "UserInfo": {
+                    "userId": user._id,
+                    "verified": user.verified,
+                    "email": user.email,
+                    "username": user.username,
+                    "roles": user.roles
+                }
+            },
+            process.env.ACCESS_TOKEN_SECRET,
+            { expiresIn: '15m' }
+        );
+
+        const refreshToken = jwt.sign(
+            { "username": user.username },
+            process.env.REFRESH_TOKEN_SECRET,
+            { expiresIn: '7d' }
+        )
+    
+        // Create secure cookie with refresh token 
+        res.cookie('jwt', refreshToken, {
+            httpOnly: true, //accessible only by web server 
+            secure: true, //https
+            sameSite: 'None', //cross-site cookie 
+            maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
+        })
+
+        res.status(200).json({ success: true, message: 'Authentication successful', accessToken, user });
+    } catch (error) {
+        console.error(error);
+        res.status(401).json({ success: false, message: 'Authentication failed' });
+    }
+};
+
 
 // @desc Verify Email using OTP
 // @route POST /auth/verifyemail
@@ -395,6 +463,7 @@ const logout = (req, res) => {
 
 module.exports = {
     login,
+    GoogleHandler,
     refresh,
     createNewOTP,
     VerifyOTP,

@@ -12,6 +12,9 @@ router.route('/register')
 router.route('/refresh')
     .get(authController.refresh)
 
+router.route('/google')
+    .get(authController.GoogleHandler)
+
 router.route('/verifyotp')
     .post(authController.VerifyOTP)
 
