@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
-import { useRegisterMutation } from '../auth/authApiSlice';
+
+import { useGoogleHandlerMutation, useRegisterMutation } from '../auth/authApiSlice';
+import PulseLoader from 'react-spinners/PulseLoader'
+
 import useTitle from '../hooks/useTitle'
+import useAuth from '../hooks/useAuth';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
-import PulseLoader from 'react-spinners/PulseLoader'
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
-import useAuth from '../hooks/useAuth';
+
 import Tag from '../components/Tag'
 
 const Register = () => {
@@ -22,10 +26,36 @@ const Register = () => {
   const navigate = useNavigate()
 
   const [register, { isLoading }] = useRegisterMutation()
+  // const { mutate: HandleGoogleAuth, isLoading: isGoogleLoading } = useGoogleHandlerMutation()
 
   const HandlePasswordVisibility = () => {
     setPasswordVisibility(!PasswordVisible);
     // console.log(PasswordVisible);
+  };
+
+  // const responseGoogle = async (response) => {
+  //   try {
+  //     const res = await HandleGoogleAuth({ tokenId: response.tokenId }).unwrap()
+  //     if (response.error) {
+  //       toast.error(response.error)
+  //     } else {
+  //       toast.success('Registration Successful')
+  //       setName('')
+  //       setEmail('')
+  //       setPassword('')
+  //       navigate('/userdashboard')
+  //     }
+  //     console.log(res.data);
+  //   } catch (error) {
+  //     toast.error('Failed to register. Please try again.');
+  //     console.error('Registration Error:', error);
+  //   }
+  // };
+
+  const GoogleAuth = () => {
+    // Redirect the user to the backend endpoint for Google authentication
+    window.location.href = `${import.meta.env.VITE_API_URL}auth/google`;
+
   };
 
   const handleRegister = async (e) => {
@@ -127,7 +157,11 @@ const Register = () => {
           </button>
           <section className='w-full justify-center items-center '>
             <div
-              className='w-full cursor-pointer justify-center text-center transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-2 mt-3 rounded-3xl'>
+              className='w-full cursor-pointer justify-center text-center transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-2 mt-3 rounded-3xl'
+              onClick={() => {
+                GoogleAuth();
+              }}
+            >
               <FontAwesomeIcon
                 icon={faGoogle}
                 size="lg"

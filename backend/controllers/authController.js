@@ -117,20 +117,32 @@ const login = async (req, res) => {
 
 }
 
-
 // @desc Login/Signup using Google
-// @route POST /auth/google
+// @route GET /auth/google
 // @access Public
-const GoogleHandler = async (req, res) => {
-    const { tokenId } = req.body;
+const GoogleHandler = (req, res) => {
+    // Redirect to Google OAuth endpoint
+    const redirectUrl = `https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=${process.env.GOOGLE_REDIRECT_URI}&scope=email%20profile&state=some_state`;
+    res.redirect(redirectUrl);
+};
+
+
+// @desc Callback for Google OAuth
+// @route GET /auth/google/callback
+// @access Public
+const GoogleCallback = async (req, res) => {
+    // const { tokenId } = req.body;
 
     try {
-        const ticket = await client.verifyIdToken({
-            idToken: tokenId,
-            audience: process.env.GOOGLE_CLIENT_ID,
-        });
+        const { code } = req.query;
 
-        const { name, email } = ticket.getPayload();
+        // Exchange code for access token
+        const { tokens } = await client.getToken({ code });
+
+        // Get user info using the access token
+        const { data } = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+            headers: { Authorization: `Bearer ${tokens.access_token}` },
+        });
 
         // Check if the user is already registered in the database
         let user = await User.findOne({ email }).exec();
@@ -138,8 +150,8 @@ const GoogleHandler = async (req, res) => {
         if (!user) {
             // If not registered, create a new user without a password
             user = await User.create({
-                username: name,
-                email: email,
+                username: data.name,
+                email: data.email,
                 verified: true, // Assuming Google provides verified emails
                 isGoogleUser: true, // Add a flag to indicate Google user
             });
@@ -164,7 +176,7 @@ const GoogleHandler = async (req, res) => {
             process.env.REFRESH_TOKEN_SECRET,
             { expiresIn: '7d' }
         )
-    
+
         // Create secure cookie with refresh token 
         res.cookie('jwt', refreshToken, {
             httpOnly: true, //accessible only by web server 
@@ -174,6 +186,7 @@ const GoogleHandler = async (req, res) => {
         })
 
         res.status(200).json({ success: true, message: 'Authentication successful', accessToken, user });
+        res.redirect(`${process.env.VITE_FRONTEND_URL}/userdashboard`);
     } catch (error) {
         console.error(error);
         res.status(401).json({ success: false, message: 'Authentication failed' });
@@ -463,6 +476,7 @@ const logout = (req, res) => {
 
 module.exports = {
     login,
+    GoogleCallback,
     GoogleHandler,
     refresh,
     createNewOTP,

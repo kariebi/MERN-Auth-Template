@@ -15,6 +15,9 @@ router.route('/refresh')
 router.route('/google')
     .get(authController.GoogleHandler)
 
+    router.route('/google/callback')
+    .get(authController.GoogleCallback)
+
 router.route('/verifyotp')
     .post(authController.VerifyOTP)
 

@@ -1,18 +1,23 @@
 import { useRef, useState, useEffect } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setCredentials } from '../auth/authSlice'
-import { useLoginMutation } from '../auth/authApiSlice'
-import usePersist from '../hooks/usePersist'
-import useTitle from '../hooks/useTitle'
-import toast from 'react-hot-toast';
-import PulseLoader from 'react-spinners/PulseLoader'
-import Tag from '../components/Tag'
-import useAuth from '../hooks/useAuth'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons"
 import { faGoogle } from '@fortawesome/free-brands-svg-icons'
+
+import toast from 'react-hot-toast';
+import PulseLoader from 'react-spinners/PulseLoader'
+
+import { setCredentials } from '../auth/authSlice'
+import { useLoginMutation, useGoogleHandlerMutation } from '../auth/authApiSlice'
+
+import usePersist from '../hooks/usePersist'
+import useTitle from '../hooks/useTitle'
+
+import Tag from '../components/Tag'
+import useAuth from '../hooks/useAuth'
+
 
 const SignIn = () => {
   useTitle('SignIn')
