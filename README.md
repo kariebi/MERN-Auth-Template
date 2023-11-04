@@ -4,9 +4,11 @@
 **Star this Repo⭐**
 
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
-<div align='center'>
-![](kariebi.gif)
+
+<div style="text-align:center" align='center'>
+  <img src="kariebi.gif" alt="Kariebi GIF">
 </div>
+
 ## Features
 
 - **Vite-React for Frontend**: The frontend is built using Vite, a fast development server and build tool for modern web development.
