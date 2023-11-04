@@ -140,9 +140,9 @@ const GoogleCallback = async (req, res) => {
 
     try {
         const { code } = req.query;
-        console.log(process.env.GOOGLE_CLIENT_ID)
-        console.log(process.env.GOOGLE_CLIENT_SECRET)
-        console.log(process.env.GOOGLE_REDIRECT_URI)
+        // console.log(process.env.GOOGLE_CLIENT_ID)
+        // console.log(process.env.GOOGLE_CLIENT_SECRET)
+        // console.log(process.env.GOOGLE_REDIRECT_URI)
         // Exchange code for access token
         const { tokens } = await client.getToken(code);
         // console.log(tokens)
