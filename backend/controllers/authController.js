@@ -1,12 +1,17 @@
 const User = require('../models/User')
 const Token = require('../models/Token')
 const jwt = require('jsonwebtoken')
+const axios = require('axios')
 const { OAuth2Client } = require('google-auth-library');
 const { hashPassword, comparePassword, sendOTPEmail, generateRandomToken } = require('../helpers/auth')
 require('dotenv').config();
 
 // Google OAuth Config
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const client = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI,
+);
 
 // @desc Register
 // @route POST /auth
@@ -135,17 +140,19 @@ const GoogleCallback = async (req, res) => {
 
     try {
         const { code } = req.query;
-
+        console.log(process.env.GOOGLE_CLIENT_ID)
+        console.log(process.env.GOOGLE_CLIENT_SECRET)
+        console.log(process.env.GOOGLE_REDIRECT_URI)
         // Exchange code for access token
-        const { tokens } = await client.getToken({ code });
-
+        const { tokens } = await client.getToken(code);
+        console.log(tokens)
         // Get user info using the access token
         const { data } = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: { Authorization: `Bearer ${tokens.access_token}` },
         });
 
         // Check if the user is already registered in the database
-        let user = await User.findOne({ email }).exec();
+        let user = await User.findOne({ email: data.email }).exec();
 
         if (!user) {
             // If not registered, create a new user without a password
@@ -189,7 +196,7 @@ const GoogleCallback = async (req, res) => {
         res.redirect(`${process.env.VITE_FRONTEND_URL}/userdashboard`);
     } catch (error) {
         console.error(error);
-        res.status(401).json({ success: false, message: 'Authentication failed' });
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
 
