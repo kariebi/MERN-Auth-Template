@@ -4,22 +4,24 @@
 **Star this Repo⭐**
 
 A MERN (MongoDB, Express.js, React, Node.js) authentication template using ReactJS for the frontend. This template is designed to provide a starting point for MERN stack developers looking to implement authentication in their projects.
-
+<div align='center'>
 ![](kariebi.gif)
-
+</div>
 ## Features
 
 - **Vite-React for Frontend**: The frontend is built using Vite, a fast development server and build tool for modern web development.
 - **Tailwind CSS for Styling**: The UI of this app also implemented TailwindCSS, for easy and easily adjustable styling.
 - **Fortawesome icons**: This template also uses icons gotten from the Fortawesome library.
 - **Express.js for Backend API**: The backend API is powered by Express.js, a minimal and flexible Node.js web application framework.
-- **NodeMailer in Express for Emailing  Users**: Used Nodemailer for emailing users their one-time passwords for email verification and password recovery.
+- **NodeMailer in Express for Emailing Users**: Used Nodemailer for emailing users their one-time passwords for email verification and password recovery.
 - **MongoDB for Database**: MongoDB is used as the database to store user authentication information.
 - **Authentication Middleware**: The template includes middleware for user authentication, making it easy to secure routes.
 - **JWT (JSON Web Tokens) for Authentication**: JSON Web Tokens are used for secure authentication between the frontend and backend.
+- **Google OAuth (Coming Soon)**: Integration with Google OAuth for seamless registration and login.
 - **Customizable**: Easily customizable to fit your project's specific requirements.
 
-**I HAVE'NT ADDED GOOGLE AUTH FUNCTIONALITY YET! JUST A BUTTON! If you want me to add it, please let me know.**
+**Star this ⭐:**
+- I will be adding Google-OAuth so users can Register/signup and Signin/login directly with a click of a button and maybe Github-OAuth. Plus, I will also be refining it depending on the feedback given, so please star it to keep it on the watch.
 
 ## Getting Started
 
@@ -67,6 +69,22 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
 
     Update the `MONGODB_URI` with your MongoDB connection URI. For `SENDER_EMAIL` and `APP_PASSWORD`, use your Gmail address and the app password generated following the steps below.
 
+2. Create a `.env` file in the frontend folder of the project:
+
+    ```env
+    VITE_API_URL='http://localhost:3500/'
+    ```
+
+3. Update your backend `.env` file with Google OAuth details:
+
+    ```env
+    GOOGLE_CLIENT_ID='your-google-client-id'
+    GOOGLE_CLIENT_SECRET='your-google-client-secret'
+    GOOGLE_REDIRECT_URI='http://localhost:3500/auth/google/callback'
+    ```
+
+    Obtain these details by setting up a project in the [Google Developer Console](https://console.developers.google.com/) and configuring the OAuth consent screen.
+
 ### Obtaining Gmail App Password
 
 If you are using Gmail for sending emails in your application, you'll need to generate an "App Password" for secure authentication. Follow these steps:
@@ -87,7 +105,7 @@ If you are using Gmail for sending emails in your application, you'll need to ge
 
 8. Click "Generate."
 
-9. Copy the generated app password. This is the value you'll use for the `APP_PASSWORD` in your `.env` file.
+9. Copy the generated app password. This is the value you'll use for the `APP_PASSWORD` in your backend `.env` file.
 
 ### Running the Application
 
@@ -115,12 +133,4 @@ If you are using Gmail for sending emails in your application, you'll need to ge
 - Users can register and verify their emails with a time-based OTP.
 - Users can log in normally but can only use the dashboard page after their emails have been verified.
 
-## Star this ⭐:
-- I will be adding Google-OAuth so users can Register/signup and Signin/login directly with a click of a button and maybe Github-OAuth. Plus, I will also be refining it depending on the feedback given so please star it to keep it on the watch.
-
-<!-- ## Demo Video
-
-Watch the demo video for a quick overview of the MERN Auth Template:
-
-[![MERN Auth Template Demo](link_to_your_video_thumbnail)](link_to_your_video) -->
-
+## Star this ⭐
