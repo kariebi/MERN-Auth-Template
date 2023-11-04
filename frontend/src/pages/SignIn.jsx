@@ -39,6 +39,11 @@ const SignIn = () => {
     // console.log(PasswordVisible);
   };
 
+  const GoogleAuth = () => {
+    // Redirect the user to the backend endpoint for Google authentication
+    window.location.href = `${import.meta.env.VITE_API_URL}auth/google`;
+
+  };
 
   useEffect(() => {
     emailRef.current.focus()
@@ -134,7 +139,11 @@ const SignIn = () => {
 
           <section className='w-full justify-center items-center '>
             <div
-              className='w-full cursor-pointer justify-center text-center transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-2 mt-3 rounded-3xl'>
+              className='w-full cursor-pointer justify-center text-center transition duration-300 bg-white hover:bg-transparent border border-transparent hover:border-white hover:text-white px-3 py-2 mt-3 rounded-3xl'
+              onClick={() => {
+                GoogleAuth();
+              }}
+              >
               <FontAwesomeIcon
                 icon={faGoogle}
                 size="lg"

@@ -145,7 +145,7 @@ const GoogleCallback = async (req, res) => {
         console.log(process.env.GOOGLE_REDIRECT_URI)
         // Exchange code for access token
         const { tokens } = await client.getToken(code);
-        console.log(tokens)
+        // console.log(tokens)
         // Get user info using the access token
         const { data } = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
             headers: { Authorization: `Bearer ${tokens.access_token}` },
@@ -192,7 +192,7 @@ const GoogleCallback = async (req, res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000 //cookie expiry: set to match rT
         })
 
-        res.status(200).json({ success: true, message: 'Authentication successful', accessToken, user });
+        // res.status(200).json({ success: true, message: 'Authentication successful', accessToken, user });
         res.redirect(`${process.env.VITE_FRONTEND_URL}/userdashboard`);
     } catch (error) {
         console.error(error);
