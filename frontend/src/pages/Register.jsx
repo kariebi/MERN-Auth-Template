@@ -130,13 +130,13 @@ const Register = () => {
             className='mt-4 w-full flex bg-white px-3 py-2 rounded-3xl'
           >
             <input
-              className='bg-transparent focus:outline-none placeholder:text-black/70'
+              className='bg-transparent w-[90%] focus:outline-none placeholder:text-black/70'
               placeholder='Password'
               type={PasswordVisible ? "text" : "password"}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required />
-            <div type='' onClick={HandlePasswordVisibility}>
+            <div type='' className='min-w-[10%]' onClick={HandlePasswordVisibility}>
               <FontAwesomeIcon
                 icon={PasswordVisible ? faEye : faEyeSlash}
                 size="sm"
