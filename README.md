@@ -19,7 +19,7 @@ A MERN (MongoDB, Express.js, React, Node.js) authentication template using React
 - **MongoDB for Database**: MongoDB is used as the database to store user authentication information.
 - **Authentication Middleware**: The template includes middleware for user authentication, making it easy to secure routes.
 - **JWT (JSON Web Tokens) for Authentication**: JSON Web Tokens are used for secure authentication between the frontend and backend.
-- **Google OAuth (Coming Soon)**: Integration with Google OAuth for seamless registration and login.
+- **Google OAuth**: Integration with Google OAuth for seamless registration and login.
 - **Customizable**: Easily customizable to fit your project's specific requirements.
 
 **Star this ⭐:**
